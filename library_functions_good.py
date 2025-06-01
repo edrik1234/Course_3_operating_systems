@@ -21,7 +21,6 @@ def check_if_alpha(user_input: str) -> str:
     while not user_input.isalpha():
         print("this input  isn't a string try to type again please")
         user_input = try_input("please enter again and please enter a correct string: ").strip().capitalize()
-        print(user_input)
     return str(user_input)
 
 
@@ -34,7 +33,6 @@ def is_in_dictionary(key, dictionary) -> int:
 
 def check_process_states(input_process) -> str | None:
     while True:
-        print(input_process)
         for state in Process_State:
             if input_process == state.name:
                 print("the process state is ok")
