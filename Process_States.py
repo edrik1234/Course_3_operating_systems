@@ -2,8 +2,8 @@ from enum import Enum
 
 
 class Process_State(Enum):
-    New = 1
-    Ready = 2
-    Running = 3
-    Waiting = 4
-    Terminated = 5
+    NEW = 1
+    READY = 2
+    RUNNING = 3
+    WAITING = 4
+    TERMINATED = 5
