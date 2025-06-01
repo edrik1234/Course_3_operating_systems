@@ -4,7 +4,7 @@ import Process_And_Helping_Functions as library
 class PCB:
     def __init__(self, process_id, registers):
         self.pid = process_id
-        self.state = library.check_process_states(library.check_if_alpha(library.try_input("please enter the process state: ").strip()))
+        self.state = library.check_process_states(library.check_if_alpha(library.try_input("please enter the process state: ").strip())) # i changed here that i removed .capitalize() the main reason is the same as in process and helping functions
         self.program_counter = library.check_if_digit(library.try_input("please enter program counter: "))
         self.memory_start = library.check_if_digit(library.try_input("please enter memory start: "))
         self.memory_end = library.check_if_digit(library.try_input("please enter memory end: "))
