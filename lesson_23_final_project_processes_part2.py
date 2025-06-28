@@ -12,11 +12,8 @@ def downloader(url, process_index, queue, shared_total, shared_data, lock = None
 
     if lock:
         with lock:
+            time.sleep(0.001)
             shared_total.value += char_count
-    else:
-        temp = shared_total.value
-        time.sleep(0.001)
-        shared_total.value = temp + char_count
 
    
     if lock:
@@ -25,13 +22,8 @@ def downloader(url, process_index, queue, shared_total, shared_data, lock = None
                 'chars': char_count,
                 'source': process_index
             }
-    else:
-        existing = shared_data.get(url, {})
-        shared_data[url] = {
-            'chars': char_count,
-            'source': process_index,
-            'prev': existing
-        }
+
+
     queue.put((process_index, url, char_count))
 
 
