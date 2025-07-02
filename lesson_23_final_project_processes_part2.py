@@ -27,9 +27,9 @@ def downloader(url, process_index, queue, shared_total, shared_data, lock = None
     queue.put((process_index, url, char_count))
 
 
-def main(use_lock = True):
+def main(lock = True):
     queue = multiprocessing.Queue()
-    lock = multiprocessing.Lock() if use_lock else None
+    lock = multiprocessing.Lock() if lock else None
     shared_total = multiprocessing.Value('i', 0)
     manager = multiprocessing.Manager()
     shared_data = manager.dict()
