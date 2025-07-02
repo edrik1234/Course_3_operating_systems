@@ -18,7 +18,7 @@ def worker(index):
 def main():
     threads = []
     for i in range(NUMBER_OF_THREADS):
-        thread = threading.Thread(target = worker, args = (i))
+        thread = threading.Thread(target = worker, args = (i,))
         threads.append(thread)
         thread.start()
     for thread in threads:
