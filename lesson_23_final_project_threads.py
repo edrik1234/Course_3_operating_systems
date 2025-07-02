@@ -11,16 +11,14 @@ def downloader(url, index, mutex):
     global COUNTERS
     response = requests.get(url)
     content = response.text
-    with mutex:
-        temp = COUNTERS[index]
-        temp += len(content)
-        time.sleep(0.0001)
-        COUNTERS[index] = temp
-        time.sleep(0.0001)
+    temp = COUNTERS[index]
+    temp += len(content)
+    time.sleep(0.0001)
+    COUNTERS[index] = temp
+    time.sleep(0.0001)
 
 
 def main():
-    mutex = threading.Lock()
     urls = [
         'https://jsonplaceholder.typicode.com/posts',
         'https://jsonplaceholder.typicode.com/comments',
