@@ -4,9 +4,14 @@ import requests
 
 
 def downloader(url, index, queue):
-    content = requests.get(url).text
-    queue.put((index, url, len(content)))
-
+    content = requests.get(url).json()
+    file = json.load(content)
+    string = json.dumps(file)
+    len_string = len(string)
+    sum_strings += string
+    print(f"process numer {index} downloaded {len_string} chars from {url}")
+    queue.put((index, url, len(string), sum_strings))
+    
 
 def main():
     urls = [
@@ -28,13 +33,11 @@ def main():
         process.join()
 
     results = [queue.get() for _ in urls] # results = [queue.get(), queue.gett()...]
-    results.sort()
 
-    total = 0
-    for i, url, count in results:
-        print(f"Process {i} downloaded {count} chars from {url}")
-        total += count
-    print(f"Total characters: {total}")
+    print(f"total string is: {sum_strings}")
+    
+    
+    
 
 
 if __name__ == "__main__":
