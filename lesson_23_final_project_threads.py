@@ -1,23 +1,17 @@
 import time
 import requests
 import threading
+import json
 
+def downloader(url, index, results):
 
-NUMBER_OF_THREADS = 5
-COUNTERS = [0] * NUMBER_OF_THREADS
-
-
-def downloader(url, index, mutex):
-    global COUNTERS
-    response = requests.get(url)
-    content = response.text
-    temp = COUNTERS[index]
-    temp += len(content)
-    time.sleep(0.0001)
-    COUNTERS[index] = temp
-    time.sleep(0.0001)
-
-
+        response = requests.get(url)
+        json_data = json.loads(response.text)
+        json_string = json.dumps(json_data)
+        char_count = len(json_string)
+        results[index] = char_count
+        print(f"✅ Thread {index} downloaded {char_count} chars from {url}")
+    
 def main():
     urls = [
         'https://jsonplaceholder.typicode.com/posts',
@@ -27,27 +21,24 @@ def main():
         'https://jsonplaceholder.typicode.com/todos',
         'https://jsonplaceholder.typicode.com/users'
     ]
-    threads_list = []
-    for i in range (NUMBER_OF_THREADS):
-        url = urls[i]    
-        thread = threading.Thread(target = downloader, args = (url, i, mutex))
-        threads_list.append(thread)
+
+    # מערך תוצאות – לא גלובלי, עובר כ־argument בלבד
+    results = [0] * len(urls)
+    threads = []
+
+    for i, url in enumerate(urls):
+        thread = threading.Thread(target=downloader, args=(url, i, results))
+        threads.append(thread)
         thread.start()
 
+    for thread in threads:
+        thread.join()
 
-    for thread in threads_list:
-        thread.join()# here you tell three workers to dig at a same time 
-
-
-    for index in range (NUMBER_OF_THREADS):
-        print(f"thread number {index} downloaded {COUNTERS[index]} chars from {url}")
-    counter = 0
-    counter = sum(COUNTERS)
-    print(f"the total chars is {counter}")
-
+    total = sum(results)
+    print(f"\n📦 Total characters downloaded: {total}")
 
 if __name__ == "__main__":
     start = time.time()
     main()
     end = time.time()
-    print(f"the total time of executing is {end - start} seconds")
+    print(f"⏱️ Execution time: {end - start:.3f} seconds")
