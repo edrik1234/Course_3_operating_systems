@@ -13,7 +13,7 @@ def downloader(url, index, COUNTERS):
     COUNTERS[index] = temp
     time.sleep(0.0001)
     print(f"thread number {index} downloaded {temp} chars from {url}")
-  
+    
 
 def main():
     urls = [
@@ -24,18 +24,21 @@ def main():
         'https://jsonplaceholder.typicode.com/todos',
         'https://jsonplaceholder.typicode.com/users'
     ]
-
+    
     threads_list = []
     COUNTERS = [0] * len(urls)
     for i, url in enumerate(urls):
-        thread = threading.Thread(target = downloader, args = (url, i, COUNTERS ))
+        thread = threading.Thread(target = downloader, args = (url, i, COUNTERS))
         threads_list.append(thread)
         thread.start()
 
 
     for thread in threads_list:
         thread.join()# here you tell three workers to dig at a same time 
-    total_chars = sum(COUNTERS)
+
+    total_chars = 0
+    for counter in COUNTERS:
+        total_chars += counter
     print(f"total chars is {total_chars}")
     
 
