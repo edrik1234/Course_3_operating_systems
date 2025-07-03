@@ -10,9 +10,7 @@ def downloader(url, index, COUNTERS):
     json_string = json.dumps(json_file)
     temp = COUNTERS[index]
     temp += len(json_string)
-    time.sleep(0.0001)
     COUNTERS[index] = temp
-    time.sleep(0.0001)
     time.sleep(0.0001)
     print(f"thread number {index} downloaded {temp} chars from {url}")
   
