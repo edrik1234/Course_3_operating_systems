@@ -1,12 +1,17 @@
 import multiprocessing
 import time
 import requests
+import json
 
 
 def downloader(url, index, queue):
-    content = requests.get(url).text
-    queue.put((index, url, len(content)))
-
+    json_data = requests.get(url).json()
+    json_string = json.dumps(json_data)
+    len_string = len(json_string)
+    print(f"process numer {index} downloaded {len_string} chars from {url}")
+    queue.put(len_string)
+    time.sleep(0.01)
+    
 
 def main():
     urls = [
@@ -27,14 +32,11 @@ def main():
     for process in processes:
         process.join()
 
-    results = [queue.get() for _ in urls] # results = [queue.get(), queue.gett()...]
-    results.sort()
 
-    total = 0
-    for i, url, count in results:
-        print(f"Process {i} downloaded {count} chars from {url}")
-        total += count
-    print(f"Total characters: {total}")
+    total_length = 0
+    for _ in urls:
+        total_length += queue.get()
+    print(f"total strings is: {total_length}")
 
 
 if __name__ == "__main__":
