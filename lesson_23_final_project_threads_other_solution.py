@@ -4,7 +4,6 @@ import threading
 import json
 
     
-total_chars = 0
 
 def downloader(url, index, COUNTERS):
     json_file =  requests.get(url).json()
@@ -14,9 +13,7 @@ def downloader(url, index, COUNTERS):
     time.sleep(0.0001)
     COUNTERS[index] = temp
     time.sleep(0.0001)
-    global total_chars
     time.sleep(0.0001)
-    total_chars += COUNTERS[index]
     print(f"thread number {index} downloaded {temp} chars from {url}")
   
 
@@ -31,8 +28,8 @@ def main():
     ]
 
     threads_list = []
+    COUNTERS = [0] * len(urls)
     for i, url in enumerate(urls):
-        COUNTERS = [0, 0, 0, 0, 0, 0]      
         thread = threading.Thread(target = downloader, args = (url, i, COUNTERS ))
         threads_list.append(thread)
         thread.start()
@@ -40,7 +37,8 @@ def main():
 
     for thread in threads_list:
         thread.join()# here you tell three workers to dig at a same time 
-    print(f" total chars is : {total_chars}")
+    total_chars = sum(COUNTERS)
+    print(f"total chars is {total_chars}")
     
 
 
